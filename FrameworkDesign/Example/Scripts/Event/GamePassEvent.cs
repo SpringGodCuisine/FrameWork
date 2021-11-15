@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
 
 namespace FrameworkDesign.Example
 {
-    public static class GameStartEvent
+    public static class GamePassEvent
     {
         private static Action mOnEvent;
 
@@ -25,4 +22,5 @@ namespace FrameworkDesign.Example
         }
     }
 }
+
 
