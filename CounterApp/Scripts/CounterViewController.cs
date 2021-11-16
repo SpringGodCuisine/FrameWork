@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using FrameworkDesign;
 
 namespace CounterApp
 {
@@ -12,9 +11,7 @@ namespace CounterApp
         void Start()
         {
 
-            CounterModel.OnCountChanged += OnCountChanged;
-
-            OnCountChanged(CounterModel.Count);
+            OnCountChangedEvent.Register(OnCountChanged);
 
             transform.Find("BtnAdd").GetComponent<Button>().onClick.AddListener(() =>
             {
@@ -31,14 +28,14 @@ namespace CounterApp
         }
 
         //±íÏÖÂß¼­
-        private void OnCountChanged(int newCount)
+        private void OnCountChanged()
         {
-            transform.Find("CountText").GetComponent<Text>().text = newCount.ToString();
+            transform.Find("CountText").GetComponent<Text>().text = CounterModel.Count.ToString();
         }
 
         private void OnDestroy()
         {
-            CounterModel.OnCountChanged -= OnCountChanged;
+            OnCountChangedEvent.UnRegister(OnCountChanged);
         }
 
     }
@@ -48,8 +45,6 @@ namespace CounterApp
     {
 
         public static int mCount = 0;
-
-        public static Action<int> OnCountChanged;
 
         public static int Count
         {
@@ -64,10 +59,15 @@ namespace CounterApp
                 {
                     mCount = value;
 
-                    OnCountChanged?.Invoke(value);
+                    OnCountChangedEvent.Trigger();
                 }
             }
         }
+    }
+
+    public class OnCountChangedEvent : Event<OnCountChangedEvent>
+    { 
+    
     }
 }
 
