@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,12 +11,15 @@ namespace CounterApp
         // Start is called before the first frame update
         void Start()
         {
+
+            CounterModel.OnCountChanged += OnCountChanged;
+
+            OnCountChanged(CounterModel.Count);
+
             transform.Find("BtnAdd").GetComponent<Button>().onClick.AddListener(() =>
             {
                 //交互逻辑
                 CounterModel.Count++;
-                //表现逻辑
-                UpdateView();
             });
 
 
@@ -23,14 +27,18 @@ namespace CounterApp
             {
                 //交互逻辑
                 CounterModel.Count--;
-                //表现逻辑
-                UpdateView();
             });
         }
 
-        void UpdateView()
+        //表现逻辑
+        private void OnCountChanged(int newCount)
         {
-            transform.Find("CountText").GetComponent<Text>().text = CounterModel.Count.ToString();
+            transform.Find("CountText").GetComponent<Text>().text = newCount.ToString();
+        }
+
+        private void OnDestroy()
+        {
+            CounterModel.OnCountChanged -= OnCountChanged;
         }
 
     }
@@ -38,7 +46,28 @@ namespace CounterApp
 
     public static class CounterModel
     {
-        public static int Count = 0;
+
+        public static int mCount = 0;
+
+        public static Action<int> OnCountChanged;
+
+        public static int Count
+        {
+            get
+            {
+                return mCount;
+
+            }
+            set
+            {
+                if (value != mCount)
+                {
+                    mCount = value;
+
+                    OnCountChanged?.Invoke(value);
+                }
+            }
+        }
     }
 }
 
