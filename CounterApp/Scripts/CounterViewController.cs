@@ -11,31 +11,33 @@ namespace CounterApp
         void Start()
         {
 
-            OnCountChangedEvent.Register(OnCountChanged);
+            CounterModel.Count.OnValueChanged += OnCountChanged;
+
+            OnCountChanged(CounterModel.Count.Value);
 
             transform.Find("BtnAdd").GetComponent<Button>().onClick.AddListener(() =>
             {
                 //½»»¥Âß¼­
-                CounterModel.Count++;
+                CounterModel.Count.Value++;
             });
 
 
             transform.Find("BtnSub").GetComponent<Button>().onClick.AddListener(() =>
             {
                 //½»»¥Âß¼­
-                CounterModel.Count--;
+                CounterModel.Count.Value--;
             });
         }
 
         //±íÏÖÂß¼­
-        private void OnCountChanged()
+        private void OnCountChanged(int newCount)
         {
-            transform.Find("CountText").GetComponent<Text>().text = CounterModel.Count.ToString();
+            transform.Find("CountText").GetComponent<Text>().text = newCount.ToString();
         }
 
         private void OnDestroy()
         {
-            OnCountChangedEvent.UnRegister(OnCountChanged);
+            CounterModel.Count.OnValueChanged -= OnCountChanged;
         }
 
     }
@@ -43,31 +45,11 @@ namespace CounterApp
 
     public static class CounterModel
     {
-
-        public static int mCount = 0;
-
-        public static int Count
+        public static BindableProperty<int> Count = new BindableProperty<int>
         {
-            get
-            {
-                return mCount;
-
-            }
-            set
-            {
-                if (value != mCount)
-                {
-                    mCount = value;
-
-                    OnCountChangedEvent.Trigger();
-                }
-            }
-        }
+            Value = 0
+        };
     }
 
-    public class OnCountChangedEvent : Event<OnCountChangedEvent>
-    { 
-    
-    }
 }
 
