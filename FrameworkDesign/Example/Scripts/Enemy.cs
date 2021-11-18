@@ -12,13 +12,8 @@ namespace FrameworkDesign.Example
         {
             Destroy(gameObject);
 
-
-
-            KilledOneEnemyEvent.Trigger();
-
-
-
-                
+            GameModel.KillCount.Value++;
+    
         }
     }   
 }
