@@ -8,13 +8,6 @@ namespace FrameworkDesign.Example
         public void Awake()
         {
             GameStartEvent.Register(OnGameStart);
-            GameModel.KillCount.OnValueChanged += OnEnemyKilled;
-        }
-
-        private void OnEnemyKilled(int KillCount)
-        {
-            if (GameModel.KillCount.Value == 10)
-                GamePassEvent.Trigger();
         }
 
         private void OnGameStart()
@@ -25,7 +18,6 @@ namespace FrameworkDesign.Example
         private void OnDestroy()
         {
             GameStartEvent.UnRegister(OnGameStart);
-            GameModel.KillCount.OnValueChanged -= OnEnemyKilled;
         }
     }
 
