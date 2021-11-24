@@ -11,9 +11,9 @@ namespace CounterApp
         void Start()
         {
 
-            CounterModel.Count.OnValueChanged += OnCountChanged;
+            CounterModel.Instance.Count.OnValueChanged += OnCountChanged;
 
-            OnCountChanged(CounterModel.Count.Value);
+            OnCountChanged(CounterModel.Instance.Count.Value);
 
             transform.Find("BtnAdd").GetComponent<Button>().onClick.AddListener(() =>
             {
@@ -39,15 +39,17 @@ namespace CounterApp
 
         private void OnDestroy()
         {
-            CounterModel.Count.OnValueChanged -= OnCountChanged;
+            CounterModel.Instance.Count.OnValueChanged -= OnCountChanged;
         }
 
     }
 
 
-    public static class CounterModel
+    public class CounterModel:Singleton<CounterModel>
     {
-        public static BindableProperty<int> Count = new BindableProperty<int>
+        private CounterModel() { }
+
+        public BindableProperty<int> Count = new BindableProperty<int>
         {
             Value = 0
         };

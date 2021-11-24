@@ -24,7 +24,7 @@ namespace CounterApp.Editor
                 new AddCountCommand().Execute();
             }
 
-            GUILayout.Label(CounterModel.Count.Value.ToString());
+            GUILayout.Label(CounterModel.Instance.Count.Value.ToString());
 
             if (GUILayout.Button("-"))
             {
