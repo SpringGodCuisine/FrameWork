@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace FrameworkDesign.Example
 {
-    public class GameModel : Singleton<GameModel>
+    public class GameModel
     {
-        private GameModel() { }
-
         public  BindableProperty<int> KillCount = new BindableProperty<int>
         {
             Value = 0
