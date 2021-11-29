@@ -7,12 +7,12 @@ namespace CounterApp
 {
     public class CounterViewController : MonoBehaviour
     {
-        private CounterModel mCounterModel;
+        private ICounterModel mCounterModel;
           
         // Start is called before the first frame update
         void Start()
         {
-            mCounterModel = CounterApp.Get<CounterModel>();
+            mCounterModel = CounterApp.Get<ICounterModel>();
 
             mCounterModel.Count.OnValueChanged += OnCountChanged;
 
@@ -47,10 +47,13 @@ namespace CounterApp
 
     }
 
-
-    public class CounterModel
+    public interface ICounterModel
+    { 
+        BindableProperty<int> Count { get; }
+    }
+    public class CounterModel : ICounterModel
     {
-        public BindableProperty<int> Count = new BindableProperty<int>
+        public BindableProperty<int> Count { get; } = new BindableProperty<int>
         {
             Value = 0
         };
