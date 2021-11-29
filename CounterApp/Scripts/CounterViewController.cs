@@ -47,16 +47,32 @@ namespace CounterApp
 
     }
 
-    public interface ICounterModel
+    public interface ICounterModel : IModel
     { 
         BindableProperty<int> Count { get; }
     }
     public class CounterModel : ICounterModel
     {
+        public void Init()
+        {
+            var Storage = Architecture.GetUtility<IStorage>();
+
+            Count.Value = Storage.LoadInt("COUNTER_COUNT", 0);
+
+            Count.OnValueChanged += count =>
+            {
+                Storage.SaveInt("COUNTER_COUNT", count);
+            };
+        }
+
+
         public BindableProperty<int> Count { get; } = new BindableProperty<int>
         {
             Value = 0
         };
+        public IArchitecture Architecture { get; set; }
+
+
     }
 
 }
